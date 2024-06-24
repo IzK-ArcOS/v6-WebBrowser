@@ -1,33 +1,35 @@
-import { DefaultIcon } from "$ts/images/apps";
-import { Runtime } from "./runtime";
-import AppSvelte from "../App.svelte";
+import { GlobeIcon } from "$ts/images/general";
 import { App } from "$types/app";
+import AppSvelte from "../App.svelte";
+import { Runtime } from "./runtime";
 
-export const app: App = {
+export const WebBrowserApp: App = {
   metadata: {
-    name: "App Template",
-    description: "This is an app template",
+    name: "Internet Explorer",
+    description: "Browse the World Wide Web",
     author: "The ArcOS Team",
     version: "0.0.0",
-    icon: DefaultIcon
+    icon: GlobeIcon,
+    appGroup: "utilities",
+    dependendsOn: ["ArcShell"],
   },
   runtime: Runtime,
   content: AppSvelte,
-  id: "appTemplate",
-  size: { w: 0, h: 0 },
-  minSize: { w: 0, h: 0 },
-  maxSize: { w: 0, h: 0 },
+  id: "WebBrowserApp",
+  size: { w: 700, h: 500 },
+  minSize: { w: 500, h: 400 },
+  maxSize: { w: 1200, h: 900 },
   pos: { x: 0, y: 0 },
   state: {
     minimized: false,
     maximized: false,
-    headless: false,
+    headless: true,
     fullscreen: false,
-    resizable: false
+    resizable: true,
   },
   controls: {
-    minimize: false,
-    maximize: false,
-    close: false
-  }
-}
+    minimize: true,
+    maximize: true,
+    close: true,
+  },
+};
