@@ -1,3 +1,51 @@
-window#appTemplate { /* Rename appTemplate to the ID of the app */
-  color: #f0f;
+#WebBrowserApp > div.body {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  background-color: transparent;
+  height: 100%;
+  overflow: hidden;
+}
+
+#WebBrowserApp > div.body div.toolbar {
+  display: flex;
+  height: 40px;
+}
+
+#WebBrowserApp > div.body div.webpage {
+  height: calc(100% - 40px - var(--titlebar-height));
+  background-color: var(--win-bg);
+  border-top: var(--win-border);
+  position: relative;
+}
+
+#WebBrowserApp > div.body div.webpage > * {
+  border: none;
+  width: 100%;
+  height: 100%;
+}
+
+#WebBrowserApp > div.body div.webpage iframe {
+  background-color: #fff;
+}
+
+#WebBrowserApp > div.body div.webpage div.load-error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--win-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+#WebBrowserApp > div.body div.webpage div.load-error img {
+  height: 48px;
+}
+
+#WebBrowserApp > div.body div.webpage div.load-error p {
+  max-width: 400px;
 }

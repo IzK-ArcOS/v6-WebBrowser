@@ -32,4 +32,5 @@ export const WebBrowserApp: App = {
     maximize: true,
     close: true,
   },
+  glass: true,
 };
