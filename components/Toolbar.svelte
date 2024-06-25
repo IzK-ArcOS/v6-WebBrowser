@@ -3,7 +3,7 @@
 
   export let runtime: Runtime;
 
-  const { currentUrl } = runtime;
+  const { currentUrl, historyPointer, history } = runtime;
 
   let url = "";
 
@@ -15,10 +15,18 @@
 
 <div class="toolbar">
   <div class="navigation">
-    <button class="material-icons-round" on:click={() => runtime.goBack()}>
+    <button
+      class="material-icons-round"
+      on:click={() => runtime.goBack()}
+      disabled={$historyPointer <= 0}
+    >
       arrow_back_ios_new
     </button>
-    <button class="material-icons-round" on:click={() => runtime.goForward()}>
+    <button
+      class="material-icons-round"
+      on:click={() => runtime.goForward()}
+      disabled={$historyPointer >= $history.length - 1}
+    >
       arrow_forward_ios
     </button>
     <button class="material-icons-round" on:click={() => runtime.refresh()}>refresh</button>

@@ -1,7 +1,6 @@
 import { AppRuntime } from "$ts/apps/runtime";
 import { GlobeIcon, SpinnerIcon } from "$ts/images/general";
 import { Process } from "$ts/process";
-import { createErrorDialog } from "$ts/process/error";
 import { Store } from "$ts/writable";
 import type { App, AppMutator } from "$types/app";
 import axios from "axios";
@@ -17,7 +16,7 @@ export class Runtime extends AppRuntime {
   public loadEnd = Store<number>(0);
   public loadDuration = Store<number>(0);
   public history = Store<string[]>([]);
-  public historyPointer = Store<number>(0);
+  public historyPointer = Store<number>(-1);
 
   private _initialized = false;
 
@@ -88,16 +87,6 @@ export class Runtime extends AppRuntime {
 
       this.loadEnd.set(performance.now());
       this.loadDuration.set(this.loadEnd.get() - this.loadStart.get());
-
-      createErrorDialog(
-        {
-          title: this.iframe.src,
-          message: this.loadDuration.get().toString(),
-          buttons: [{ caption: "Okay", action() {} }],
-        },
-        this.pid,
-        true
-      );
     });
   }
 
