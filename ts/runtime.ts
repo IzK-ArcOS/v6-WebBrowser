@@ -16,6 +16,8 @@ export class Runtime extends AppRuntime {
   public loadStart = Store<number>(0);
   public loadEnd = Store<number>(0);
   public loadDuration = Store<number>(0);
+  public history = Store<string[]>([]);
+  public historyPointer = Store<number>(0);
 
   private _initialized = false;
 
@@ -45,19 +47,17 @@ export class Runtime extends AppRuntime {
     this.currentUrl.set(args[0]);
   }
 
-  public async Go() {
-    const address = this.currentUrl.get();
-
+  public async navigate(url: string) {
     this.loadError.set(false);
 
-    if (!address) return;
+    if (!url) return;
 
     this.loading.set(true);
     this.loadStart.set(performance.now());
 
     if (!this.iframe) return;
 
-    const loadable = await this.checkIfLoadable(address);
+    const loadable = await this.checkIfLoadable(url);
 
     if (!loadable && this.isHttpUrl.get()) {
       this.loadError.set(true);
@@ -65,7 +65,19 @@ export class Runtime extends AppRuntime {
       return;
     }
 
-    this.iframe.src = address;
+    this.iframe.src = url;
+  }
+
+  public async Go() {
+    const address = this.currentUrl.get();
+
+    this.addToHistory(address);
+    this.navigate(address);
+  }
+
+  public refresh() {
+    this.currentUrl.set(this.iframe.src);
+    this.Go();
   }
 
   private _registerEventListeners() {
@@ -117,6 +129,52 @@ export class Runtime extends AppRuntime {
       return res.data.canLoadInIframe;
     } catch (e) {
       return true;
+    }
+  }
+
+  public truncateForwardHistory() {
+    const historyPointer = this.historyPointer.get();
+    let history = this.history.get();
+
+    if (historyPointer < history.length - 1) {
+      history = history.slice(0, historyPointer + 1);
+    }
+
+    this.history.set(history);
+  }
+
+  public addToHistory(url: string) {
+    const history = this.history.get();
+    let pointer = this.historyPointer.get();
+
+    history.push(url);
+    pointer++;
+
+    this.historyPointer.set(pointer);
+    this.history.set(history);
+  }
+
+  public goBack() {
+    const history = this.history.get();
+    let pointer = this.historyPointer.get();
+
+    if (pointer > 0) {
+      pointer--;
+
+      this.historyPointer.set(pointer);
+      this.navigate(history[pointer]);
+    }
+  }
+
+  public goForward() {
+    const history = this.history.get();
+    let pointer = this.historyPointer.get();
+
+    if (pointer < history.length - 1) {
+      pointer++;
+
+      this.historyPointer.set(pointer);
+      this.navigate(history[pointer]);
     }
   }
 }

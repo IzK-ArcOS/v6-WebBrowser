@@ -15,9 +15,13 @@
 
 <div class="toolbar">
   <div class="navigation">
-    <button class="material-icons-round">arrow_back_ios_new</button>
-    <button class="material-icons-round">arrow_forward_ios</button>
-    <button class="material-icons-round">refresh</button>
+    <button class="material-icons-round" on:click={() => runtime.goBack()}>
+      arrow_back_ios_new
+    </button>
+    <button class="material-icons-round" on:click={() => runtime.goForward()}>
+      arrow_forward_ios
+    </button>
+    <button class="material-icons-round" on:click={() => runtime.refresh()}>refresh</button>
   </div>
   <input
     type="text"
