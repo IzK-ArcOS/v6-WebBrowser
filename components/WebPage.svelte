@@ -12,11 +12,15 @@
   onMount(() => {
     runtime.initialize(iframe);
   });
+
+  function context(e: MouseEvent) {
+    e.preventDefault();
+  }
 </script>
 
 <div class="webpage">
   <!-- svelte-ignore a11y-missing-attribute -->
-  <iframe bind:this={iframe} class:visible={!$loadError}></iframe>
+  <iframe bind:this={iframe} class:visible={!$loadError} on:contextmenu={context}></iframe>
   {#if $loadError}
     <LoadError {runtime} />
   {/if}

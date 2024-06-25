@@ -83,6 +83,7 @@ export class Runtime extends AppRuntime {
     if (!this.iframe) return;
 
     this.iframe.addEventListener("load", () => {
+      this.currentUrl.set(this.iframe.getAttribute("src"));
       this.loading.set(false);
 
       this.loadEnd.set(performance.now());
@@ -107,7 +108,7 @@ export class Runtime extends AppRuntime {
     });
 
     this.currentUrl.subscribe((v) => {
-      this.setWindowTitle(v, false);
+      this.setWindowTitle(v);
     });
   }
 

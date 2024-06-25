@@ -1,0 +1,27 @@
+#WebBrowserApp > div.body div.toolbar {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  padding: 0 5px;
+  gap: 5px;
+}
+
+#WebBrowserApp > div.body div.toolbar div.navigation {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#WebBrowserApp > div.body div.toolbar button.material-icons-round {
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+#WebBrowserApp > div.body div.toolbar input {
+  flex-grow: 1;
+  background-color: var(--button-glass-bg);
+  border: none;
+}
