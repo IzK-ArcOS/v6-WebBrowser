@@ -1,38 +1,35 @@
 <script lang="ts">
+  import axios from "axios";
+
   let url = "";
-  let status = "";
   let iframe: HTMLIFrameElement;
   let title = "";
+  let loadable = true;
 
-  function loadIframe() {
-    // Reset the status and iframe src
-    status = "";
+  async function loadIframe() {
     iframe.src = "";
+    loadable = true;
 
-    iframe.onload = function () {
-      console.log(iframe);
-      status = "Iframe loaded successfully.";
-      try {
-        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-        // Attempt to access the iframe's document
-        if (!iframeDoc) {
-          throw new Error("Cross-origin access denied");
-        }
-      } catch (e) {
-        status = "Iframe loaded but cross-origin access is denied.";
-      }
-    };
+    window.addEventListener("error", (e) => {
+      console.log(e.error, e.message);
+    });
+    iframe.addEventListener("error", (e) => {
+      console.log(e.message, e.error);
+    });
 
-    iframe.onloadeddata = (e) => {
-      console.log(e);
-    };
+    loadable = await checkIfLoadable(url);
 
-    iframe.onerror = function () {
-      status = "Iframe failed to load.";
-    };
+    if (loadable) iframe.src = url;
+  }
 
-    // Set the new URL to the iframe
-    iframe.src = url;
+  async function checkIfLoadable(url: string) {
+    try {
+      const res = await axios.post("https://ifc.izaak-kuipers.workers.dev", { url });
+
+      return res.data.canLoadInIframe;
+    } catch {
+      return false;
+    }
   }
 </script>
 
@@ -41,16 +38,7 @@
   <button on:click={loadIframe}>Load Iframe</button>
   <br />
   <iframe id="iframe" width="600" height="400" {title} bind:this={iframe}></iframe>
-  <div class="status">{status}</div>
+  {#if !loadable}
+    <h1>Can't load!</h1>
+  {/if}
 </div>
-
-<style>
-  .container {
-    padding: 1em;
-  }
-
-  .status {
-    margin-top: 1em;
-    font-weight: bold;
-  }
-</style>
