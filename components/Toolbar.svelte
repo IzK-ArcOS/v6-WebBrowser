@@ -10,6 +10,7 @@
   function go() {
     $currentUrl = url;
     runtime.Go();
+    url = "";
   }
 </script>
 

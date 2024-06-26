@@ -38,12 +38,6 @@ export class Runtime extends AppRuntime {
 
       this.currentHostname.set(hostname);
     });
-
-    const args = process.args;
-
-    if (!args.length || typeof args[0] !== "string") return;
-
-    this.currentUrl.set(args[0]);
   }
 
   public async navigate(url: string) {
@@ -55,6 +49,8 @@ export class Runtime extends AppRuntime {
     this.loadStart.set(performance.now());
 
     if (!this.iframe) return;
+
+    this.iframe.src = "";
 
     const loadable = await this.checkIfLoadable(url);
 
@@ -107,8 +103,12 @@ export class Runtime extends AppRuntime {
       this.appMutator.set(app);
     });
 
-    this.currentUrl.subscribe((v) => {
-      this.setWindowTitle(v);
+    setTimeout(() => {
+      const args = this.process.args;
+
+      if (!args.length || typeof args[0] !== "string") return;
+
+      this.navigate(args[0]);
     });
   }
 
