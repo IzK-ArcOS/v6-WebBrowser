@@ -33,4 +33,5 @@ export const WebBrowserApp: App = {
     close: true,
   },
   glass: true,
+  loadCondition: () => false,
 };
